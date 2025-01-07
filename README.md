@@ -18,4 +18,4 @@
 
 1. Clona este repositorio:
    ```bash
-   git clone https://github.com/linkelverde789d/ChatConnect.git
+   git clone https://github.com/linkelverde789/ChatConnect.git
