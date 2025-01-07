@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let usuario='<%= usuario %>';
+        if (!localStorage.getItem('usuario')||localStorage.getItem('usuario')!==usuario) {
+            localStorage.setItem('usuario', usuario);
+        }
+    </script>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="/login"><%= usuario %></a></li>
+            <li><a href="/crearSala">Crear Sala</a></li>
+            <li><a href="/unirseSala">Unirse a Sala</a></li>
+            <li><a href="/chatsPrivados">Chats Privados</a></li>
+        </ul>
+    </nav>
+    <h1>Menú</h1>
+    <p id="mensaje"></p>
+    <div class="salasUnidas" id="salasUnidas">
+    </div>
+</body>
+
+</html>
+
+<script>
+    const socket = io();
+
+
+    socket.emit('obtenerSalasUnidas', localStorage.getItem('usuario'));
+    socket.on('recibirSalasUnidas', (salasUnidas) => {
+        const mensaje=document.getElementById('mensaje');
+        const div = document.getElementById('salasUnidas');
+        if (salasUnidas.length >0) {
+            mensaje.innerHTML='Estas son las salas a las que te has unido: ';
+            div.innerHTML='';
+            const ul = document.createElement('ul');
+            salasUnidas.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item.clave;
+                const a=document.createElement('a');
+                a.href=`/chat/${item.clave}`;
+                a.textContent='Volver al chat';
+                li.appendChild(a);
+                ul.appendChild(li);
+            });
+            div.appendChild(ul);
+        } else {
+            mensaje.textContent = 'No te has unido a ninguna sala';
+            div.style.display='none';
+        }
+    });
+</script>

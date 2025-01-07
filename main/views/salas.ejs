@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opciones de Salas - ChatConnect</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        header {
+            background: #3498db;
+            color: #fff;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #2980b9 3px solid;
+        }
+        header a {
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+        header ul {
+            padding: 0;
+            list-style: none;
+        }
+        header li {
+            display: inline;
+            padding: 0 20px 0 20px;
+        }
+        header #branding {
+            float: left;
+        }
+        header #branding h1 {
+            margin: 0;
+        }
+        header nav {
+            float: right;
+            margin-top: 10px;
+        }
+        header .highlight, header .current a {
+            color: #ecf0f1;
+            font-weight: bold;
+        }
+        header a:hover {
+            color: #ecf0f1;
+            font-weight: bold;
+        }
+        #showcase {
+            min-height: 400px;
+            background: url('https://www.colorfulstage.com/upload_images/media/Wallrappers/virtual_bg_01_unit01.png') no-repeat center center/cover;
+            text-align: center;
+            color: #464646;
+        }
+        #showcase h1 {
+            margin-top: 100px;
+            font-size: 55px;
+            margin-bottom: 10px;
+        }
+        #showcase p {
+            font-size: 20px;
+        }
+        #features {
+            margin-top: 20px;
+        }
+        #features .feature {
+            float: left;
+            text-align: center;
+            width: 30%;
+            padding: 10px;
+        }
+        #features .feature h3 {
+            margin-bottom: 5px;
+        }
+        .button {
+            display: inline-block;
+            font-size: 18px;
+            color: #fff;
+            background: #3498db;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background: #2980b9;
+        }
+        #room-info {
+            background: #fff;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1><span class="highlight">Chat</span>Connect</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Inicio</a></li>
+                    <li class="current"><a href="/salas">Salas</a></li>
+                    <li><a href="/chatsPrivados">Chats Privados</a></li>
+                    <li><a href="/menu"><%= usuario %></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="showcase">
+        <div class="container">
+            <h1>Opciones de Salas</h1>
+            <p>Crea o únete a salas de chat para conectar con otros usuarios</p>
+        </div>
+    </section>
+
+    <section id="features">
+        <div class="container">
+            <div class="feature">
+                <h3>Crear Sala</h3>
+                <p>Inicia tu propia sala de chat sobre cualquier tema que te interese.</p>
+                <a href="/crearSala" class="button">Crear Sala</a>
+            </div>
+            <div class="feature">
+                <h3>Unirse a Sala</h3>
+                <p>Explora y únete a salas públicas existentes.</p>
+                <a href="/unirseSala" class="button">Unirse a Sala</a>
+            </div>
+            <div class="feature">
+                <h3>Mis Salas</h3>
+                <p>Administra las salas que has creado o a las que te has unido.</p>
+                <a href="/menu" class="button">Ver Mis Salas</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="room-info">
+        <div class="container">
+            <h2>Acerca de las Salas de Chat</h2>
+            <p>Las salas de chat en ChatConnect son espacios virtuales donde los usuarios pueden reunirse y conversar sobre temas específicos. Existen dos tipos de salas:</p>
+            <h3>Salas Públicas</h3>
+            <p>Las salas públicas son visibles para todos los usuarios y aparecerán en el menú de "Unirse a Sala". Cualquier usuario puede unirse a estas salas sin necesidad de invitación o aprobación.</p>
+            <h3>Salas Privadas</h3>
+            <p>Las salas privadas son espacios más exclusivos. No aparecen en el menú público y solo se puede acceder a ellas mediante invitación del creador o de los miembros actuales. Estas salas ofrecen un entorno más controlado para conversaciones específicas o grupos cerrados.</p>
+        </div>
+    </section>
+</body>
+</html>

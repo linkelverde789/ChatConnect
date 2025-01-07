@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unirse a Salas</title>
+    <script src="/socket.io/socket.io.js"></script>
+
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="/login">
+                    <%= usuario %>
+                </a></li>
+            <li><a href="/crearSala">Crear Sala</a></li>
+            <li><a href="/unirseSala">Unirse a Sala</a></li>
+        </ul>
+    </nav>
+    <h1>Unirse a una sala</h1>
+    <form action="" id="formulario">
+        <input type="text" name="claveSala" id="claveSala">
+        <button type="submit">Unirse</button>
+    </form>
+    <h3>Salas públicas: </h3>
+    <div id="salasPublicas">
+
+    </div>
+    <p id="error"></p>
+</body>
+
+</html>
+
+<script>
+    const socket = io();
+    socket.emit('obtenerSalas');
+
+    socket.on('recibirSalas', (salasPublicas) => {
+        console.log('funca');
+        console.log(salasPublicas);
+        const contenedorSalasPublicas = document.getElementById('salasPublicas');
+        contenedorSalasPublicas.innerHTML = '';
+        salasPublicas.forEach(item => {
+            const nombreSala = document.createElement('p');
+            nombreSala.textContent = item.clave;
+            contenedorSalasPublicas.appendChild(nombreSala);
+        });
+    });
+
+    socket.on('exito', (sala) => { window.location.href = `/chat/${sala}` });
+    socket.on('error', (error) => {
+        document.getElementById('error').textContent = error;
+    })
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('formulario').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const claveSala = document.getElementById('claveSala').value;
+            socket.emit('unirse', ({ usuario: localStorage.getItem('usuario'), claveSala: claveSala }));
+        })
+    });
+</script>

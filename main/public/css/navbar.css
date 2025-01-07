@@ -1,0 +1,47 @@
+* {
+    margin: 0;
+}
+
+nav {
+    background-color: #333;
+    /* Fondo oscuro */
+    padding: 10px;
+    text-align: center;
+}
+
+nav ul {
+    list-style-type: none;
+    /* Eliminar los puntos de lista */
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    /* Los elementos de la lista en línea */
+    margin: 0 15px;
+    /* Espaciado entre los elementos */
+}
+
+nav a {
+    color: white;
+    /* Color del texto */
+    text-decoration: none;
+    /* Eliminar subrayado */
+    font-size: 16px;
+    /* Tamaño de la fuente */
+    padding: 10px 15px;
+    /* Relleno alrededor del enlace */
+    transition: background-color 0.3s;
+    /* Transición suave en el hover */
+}
+
+nav a:hover {
+    background-color: #575757;
+    /* Fondo más claro cuando se pasa el ratón */
+}
+
+nav a:active {
+    background-color: #444;
+    /* Fondo cuando se hace clic */
+}

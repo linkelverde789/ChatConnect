@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <link rel="stylesheet" href="css/navbar.css">
+    <script src="/socket.io/socket.io.js"></script>
+
+    <style>
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 500px;
+            margin: 0 auto;
+        }
+
+        label {
+            margin: 10px 0;
+        }
+
+        input[type='checkbox'] {
+            margin-left: 10px;
+        }
+    </style>
+
+    <script>
+        const socket = io();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('formulario').addEventListener('submit', (event) => {
+                event.preventDefault();
+                const capacidad = parseInt(document.getElementById('capacidad').value);
+                const privado = document.getElementById('privado').checked;
+                const clave = document.getElementById('clave').value;
+
+                const pepe = {
+                    capacidad: capacidad,
+                    privado: privado,
+                    claveSala: clave
+                };
+                socket.emit('crearSala', {datosFormulario: pepe, usuario: localStorage.getItem('usuario')});
+
+            });
+            socket.on('exito', (claveSala) => {
+                window.location.href = `/chat/${claveSala}`;
+            });
+
+            socket.on('error', (error)=>{
+                document.getElementById('error').textContent=error;
+            });
+        })
+    </script>
+
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/crearSala">Crear Sala</a></li>
+            <li><a href="/unirseSala">Unirse a Sala</a></li>
+        </ul>
+    </nav>
+    <h1>Crear salas</h1>
+    <form action="" method="post" id="formulario">
+        <label for="clave">Introduce el nombre de la sala</label>
+        <input type="text" name="clave" id="clave">
+        <label for="capacidad">Introduce la capacidad de la sala</label>
+        <input type="number" name="capacidad" id="capacidad">
+        <label for="privado">Sala privada: <input type="checkbox" name="privado" id="privado"></label>
+
+        <button type="submit">Crear sala</button>
+    </form>
+    <div id="error"></div>
+</body>
+
+</html>

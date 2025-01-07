@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= sala.clave %>
+    </title>
+    <style>
+        .container {
+            visibility: hidden;
+        }
+    </style>
+<link rel="stylesheet" href="/css/chat.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+    </script>
+</head>
+
+<body>
+    <h1>Chat - <%= sala.clave %>
+    </h1>
+    <p id="error"></p>
+    <div class="container">
+        <div class="informacionSala">
+            <p><strong>Propietario:</strong>
+                <%= sala.creador %>
+            </p>
+            <p><strong>Capacidad máxima:</strong>
+                <%= sala.capacidad %>
+            </p>
+            <p><strong>Nº Usuarios añadidos:</strong>
+                <span id="cantidadUsuarios">
+                    <%= sala.getCantidad() %>
+                </span>
+            </p>
+            <p><strong>Privada:</strong>
+                <%= sala.privado ? 'Sí' : 'No' %>
+            </p>
+
+        </div>
+        <button id="salirSala">Salir de la sala</button>
+        <div id="chat">
+            <div id="mensajes">
+
+            </div>
+            <form action="" id="escribirMensaje">
+                <input type="text" name="contenidoMensaje" id="contenidoMensaje" placeholder="Escribe algo!">
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    const socket = io();
+    const usuario = localStorage.getItem('usuario');
+    const claveSala = '<%= sala.clave %>';
+    socket.emit('comprobar', { claveSala: claveSala, usuario: usuario });
+
+    const contenedor = document.getElementById('mensajes');
+
+    socket.on('actualizarCantidad', (cantidad) => {
+        document.getElementById('cantidadUsuarios').textContent = cantidad;
+    });
+
+    socket.on('exito', (mensajes) => {
+        document.querySelector('.container').style.visibility = 'visible';
+        if (mensajes.length > 0) {
+            mensajes.forEach(item => {
+                let p = document.createElement('p');
+                if (item.emisor == usuario) {
+                    p.textContent = item.mensaje;
+                    p.className = 'derecha';
+                } else {
+                    p.textContent = `${item.emisor}: ${item.mensaje}`;
+                    p.className = 'izquierda';
+                }
+                contenedor.appendChild(p);
+            });
+        }else{
+            contenedor.appendChild(document.createElement('p').textContent='Ahora mismo no hay mensajes');
+        }
+        contenedor.scrollTop=contenedor.scrollHeight;
+        
+    });
+
+
+
+    socket.on('error', (error) => {
+        document.getElementById('error').innerHTML = error;
+    });
+
+    socket.on('prohibido', () => {
+        window.location.href = '/unirseSala';
+    })
+
+    socket.on('recibirMensaje', ({ emisor: emisor, mensaje: mensaje }) => {
+        const p = document.createElement('p');
+        if (emisor == usuario) {
+            p.textContent = mensaje;
+            p.className = 'derecha';
+        } else {
+            p.textContent = `${emisor}: ${mensaje}`;
+            p.className = 'izquierda';
+        }
+        contenedor.appendChild(p);
+        contenedor.scrollTop=contenedor.scrollHeight;
+
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        document.getElementById('escribirMensaje').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const mensaje = document.getElementById('contenidoMensaje').value;
+            if (!mensaje || mensaje == '') {
+                return alert('No puedes enviar un mensaje en blanco');
+            }
+            document.getElementById('contenidoMensaje').value = '';
+            socket.emit('enviarMensaje', { mensaje: mensaje, emisor: usuario, claveSala: claveSala });
+        });
+
+        document.getElementById('salirSala').addEventListener('click', () => {
+            socket.emit('salirSala', ({ usuario, claveSala }));
+        });
+
+    });
+
+</script>

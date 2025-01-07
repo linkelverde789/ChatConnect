@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= chat.codigo %>
+    </title>
+    <link rel="stylesheet" href="/css/chat.css">
+    <script src="/socket.io/socket.io.js"></script>
+
+</head>
+
+<body>
+    <h1>Chat privado con: <%= otroUsuario %>
+    </h1>
+    <p id="error"></p>
+    <div class="container">
+
+        <div id="chat">
+            <div id="mensajes">
+
+            </div>
+            <form action="" id="escribirMensaje">
+                <input type="text" name="contenidoMensaje" id="contenidoMensaje" placeholder="Escribe algo!">
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+    const codigo = '<%= chat.codigo %>';
+    const usuario = localStorage.getItem('usuario');
+    const otroUsuario = '<%= otroUsuario %>';
+    const mensajesDIV = document.getElementById('mensajes');
+    const socket = io();
+
+    socket.emit('asignarSocket', (codigo));
+
+    socket.on('recuperarMensajes', (mensajes) => {
+        mensajes.forEach(item => {
+            const p = document.createElement('p');
+            p.textContent = item.mensaje;
+            if (usuario == item.emisor) {
+                p.className = 'derecha';
+            } else {
+                p.className = 'izquierda';
+            }
+            mensajesDIV.appendChild(p);
+        });
+    })
+    socket.on('recibirMensajePrivado', ({ emisor, mensaje }) => {
+        const nuevoMensaje = document.createElement('p');
+        if (emisor == usuario) {
+            nuevoMensaje.className = 'derecha';
+        } else {
+            nuevoMensaje.className = 'izquierda';
+        }
+        nuevoMensaje.textContent = mensaje;
+        mensajesDIV.appendChild(nuevoMensaje);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('escribirMensaje').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const mensaje = document.getElementById('contenidoMensaje').value;
+            if (!mensaje || mensaje == '') {
+                return alert('No puedes enviar un mensaje en blanco');
+            }
+            document.getElementById('contenidoMensaje').value = '';
+            socket.emit('enviarMensajePrivado', { emisor: usuario, mensaje, codigo });
+        });
+
+    });
+
+</script>
