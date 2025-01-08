@@ -1,6 +1,25 @@
 # 💬 ChatConnect
 
-**ChatConnect** es un sitio web diseñado para facilitar la creación de salas de chat privadas o públicas, así como chats individuales entre usuarios. Este proyecto utiliza Node.js, EJS, y Socket.IO, y está en desarrollo.
+**ChatConnect** es un sitio web diseñado para facilitar la creación de salas de chat privadas o públicas, así como chats individuales entre usuarios. Este proyecto utiliza Node.js, EJS, y Socket.IO, y está en desarrollo (desarrollo mis cojones, estoy harto de CSS).
+
+---
+
+# DockerFile
+FROM node:20
+WORKDIR /usr/src/app
+EXPOSE 3000
+CMD ["node"]
+
+---
+
+# Comando Docker
+```bash
+docker build -t pruebanodejs .
+````
+
+```bash
+docker run -it -v ruta/al/proyecto:/usr/src/app -p 3000:3000 pruebanodejs /bin/bash
+```
 
 ---
 
